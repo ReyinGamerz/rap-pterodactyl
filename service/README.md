@@ -30,4 +30,4 @@ This is the webhook settings API and the first backup-agent success/failure hook
 
 ## Important current limitation
 
-This is a read-only catalogue API. It does not yet import manifests from Google Drive, persist jobs, execute backups, manage retention, send Discord alerts, or perform restore/migration. Those require separate reviewed workers and end-to-end tests. Never populate production with fabricated demo records.
+This is a read-only catalogue API. It does not yet import manifests from Google Drive, persist jobs, execute jobs from the API, manage retention, or perform restore/migration. Discord webhook settings and backup-agent success/failure hooks are present, but the theme-to-Admin API bridge and restore/migration/retention event hooks are not. Those require separate reviewed workers and end-to-end tests. Never populate production with fabricated demo records.
