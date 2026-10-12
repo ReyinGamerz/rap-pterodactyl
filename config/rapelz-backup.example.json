@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "timezone": "Asia/Jakarta",
+  "retention_days": 30,
+  "storage": {
+    "provider": "rclone",
+    "remote_name": "gdrive",
+    "root": "rapelz-backups",
+    "encrypt_with_age": true,
+    "verify_remote_size": true,
+    "require_integrity_check": true
+  },
+  "schedules": {
+    "panel": {
+      "enabled": true,
+      "time": "02:30",
+      "timezone": "Asia/Jakarta"
+    },
+    "nodes": {
+      "default_enabled": true,
+      "stagger_minutes": 15,
+      "per_node_overrides": {}
+    }
+  },
+  "notifications": {
+    "discord_enabled": false,
+    "webhook_env_var": "RAPELZ_DISCORD_WEBHOOK"
+  },
+  "encryption": {
+    "age_recipient_env_var": "RAPELZ_AGE_RECIPIENT",
+    "private_key_storage": "offline_only"
+  },
+  "safety": {
+    "delete_legacy_archives": false,
+    "retention_requires_verified_success": true,
+    "restore_requires_preview": true,
+    "migration_requires_final_sync": true
+  }
+}
