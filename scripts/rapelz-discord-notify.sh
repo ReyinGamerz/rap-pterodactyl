@@ -4,7 +4,7 @@ set -Eeuo pipefail
 umask 077
 EVENT="\${1:-}"
 MESSAGE="\${2:-Rapelz backup event}"
-SETTINGS="\${RAPELZ_WEBHOOK_SETTINGS_FILE:-/var/lib/rapelz-backup-service/discord-webhook.json}"
+SETTINGS="${RAPELZ_WEBHOOK_SETTINGS_FILE:-/var/lib/rapelz-backup-service/discord-webhook.json}"
 [[ "$EVENT" =~ ^(backup_success|backup_failure|verification_failure|restore_success|restore_failure|migration_success|migration_failure|retention_deleted)$ ]] || exit 2
 [[ -r "$SETTINGS" ]] || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
