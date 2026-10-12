@@ -33,7 +33,7 @@ trap 'rc=$?; log "FAILED rc=$rc line=$LINENO"; exit "$rc"' ERR
 [[ -r "$PATHS_FILE" ]] || fail "Paths allowlist is not readable: $PATHS_FILE"
 [[ "$KEEP_LOCAL_DAYS" =~ ^[0-9]+$ ]] || fail "KEEP_LOCAL_DAYS must be an integer."
 
-for cmd in age tar gzip rclone sha256sum flock date mktemp cp stat; do need "$cmd"; done
+for cmd in age tar gzip rclone sha256sum flock date mktemp cp stat sed find awk; do need "$cmd"; done
 need jq
 mkdir -p -- "$ROOT" "$(dirname "$LOG_FILE")" "$(dirname "$LOCK_FILE")"
 chmod 700 "$ROOT"
