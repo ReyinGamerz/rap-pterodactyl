@@ -71,7 +71,7 @@ done < "$PATHS_FILE"
 if [[ -r "$DB_NAMES_FILE" ]]; then
   need mysqldump
   [[ -r "$MYSQL_DEFAULTS_FILE" ]] || fail "Database list exists but MySQL defaults file is missing."
-  chmod 600 "$MYSQL_DEFAULTS_FILE"
+  [[ "$(stat -c %a "$MYSQL_DEFAULTS_FILE")" == "600" ]] || fail "MySQL defaults file must have mode 600."
   while IFS= read -r db || [[ -n "$db" ]]; do
     db="${db%%#*}"
     db="$(printf '%s' "$db" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
