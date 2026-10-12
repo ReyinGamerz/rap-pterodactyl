@@ -47,8 +47,15 @@ PAYLOAD="$STAGE/payload"
 mkdir -p "$PAYLOAD"
 MANIFEST="$STAGE/manifest.json"
 ARCHIVE="$ROOT/${SOURCE_ID}-${SOURCE_KIND}-${stamp}.tar.gz.age"
-REMOTE_DIR="${REMOTE_ROOT%/}/${SOURCE_KIND}/${SOURCE_ID}/daily"
+if [[ "$SOURCE_KIND" == "panel" ]]; then
+  REMOTE_DIR="${REMOTE_ROOT%/}/panel/daily"
+  MANIFEST_DIR="${REMOTE_ROOT%/}/panel/manifests"
+else
+  REMOTE_DIR="${REMOTE_ROOT%/}/nodes/${SOURCE_ID}/daily"
+  MANIFEST_DIR="${REMOTE_ROOT%/}/nodes/${SOURCE_ID}/manifests"
+fi
 REMOTE_FILE="$REMOTE_DIR/$(basename "$ARCHIVE")"
+REMOTE_MANIFEST="$MANIFEST_DIR/$(basename "$ARCHIVE").json"
 
 log "Starting source_kind=$SOURCE_KIND source_id=$SOURCE_ID"
 
@@ -96,6 +103,7 @@ cipher_size="$(stat -c '%s' "$ARCHIVE")"
 log "Encrypted archive ready size=$cipher_size sha256=$cipher_sha"
 
 rclone mkdir "$REMOTE_DIR"
+rclone mkdir "$MANIFEST_DIR"
 rclone copyto "$ARCHIVE" "$REMOTE_FILE" --retries 3 --low-level-retries 5
 remote_json="$(rclone lsjson "$REMOTE_FILE" --stat)"
 remote_size="$(printf '%s' "$remote_json" | jq -r '.Size // empty')"
@@ -104,8 +112,8 @@ remote_size="$(printf '%s' "$remote_json" | jq -r '.Size // empty')"
 
 # Publish a sanitized sidecar manifest only after the encrypted object upload is verified.
 jq -n --arg id "$(basename "$ARCHIVE")" --arg source_kind "$SOURCE_KIND" --arg source_id "$SOURCE_ID" --arg created_at "$(date -u -Is)" --arg object "$REMOTE_FILE" --arg sha256 "$cipher_sha" --argjson size "$cipher_size" '{schema_version:1,backup_id:$id,source_kind:$source_kind,source_id:$source_id,created_at_utc:$created_at,object:$object,ciphertext_sha256:$sha256,ciphertext_size_bytes:$size,encrypted:true,remote_size_verified:true,restore_test:"not_yet_tested"}' > "$STAGE/remote-manifest.json"
-rclone copyto "$STAGE/remote-manifest.json" "$REMOTE_FILE.manifest.json" --retries 3
-manifest_remote="$(rclone lsjson "$REMOTE_FILE.manifest.json" --stat | jq -r '.Size // empty')"
+rclone copyto "$STAGE/remote-manifest.json" "$REMOTE_MANIFEST" --retries 3
+manifest_remote="$(rclone lsjson "$REMOTE_MANIFEST" --stat | jq -r '.Size // empty')"
 manifest_local="$(stat -c '%s' "$STAGE/remote-manifest.json")"
 [[ "$manifest_remote" == "$manifest_local" ]] || fail "Manifest upload verification failed."
 
