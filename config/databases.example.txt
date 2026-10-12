@@ -1,0 +1,3 @@
+# Optional: copy to /etc/rapelz-backup/databases.txt after auditing database ownership.
+# One database name per line; do not include passwords or SQL statements.
+# rapelz
