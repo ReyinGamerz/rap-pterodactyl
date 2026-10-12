@@ -24,7 +24,18 @@
   },
   "notifications": {
     "discord_enabled": false,
-    "webhook_env_var": "RAPELZ_DISCORD_WEBHOOK"
+    "settings_file": "/var/lib/rapelz-backup-service/discord-webhook.json",
+    "supported_events": [
+      "backup_success",
+      "backup_failure",
+      "verification_failure",
+      "restore_success",
+      "restore_failure",
+      "migration_success",
+      "migration_failure",
+      "retention_deleted"
+    ],
+    "note": "Webhook URL is stored only in the service-local settings file; never commit secrets."
   },
   "encryption": {
     "age_recipient_env_var": "RAPELZ_AGE_RECIPIENT",
