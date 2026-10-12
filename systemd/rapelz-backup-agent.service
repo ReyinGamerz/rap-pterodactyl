@@ -14,7 +14,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true
 ProtectSystem=full
-ReadWritePaths=/var/lib/rapelz-backup-agent /etc/rapelz-backup /var/log /run/lock /var/tmp
+ReadWritePaths=/var/lib/rapelz-backup-agent /var/log /run/lock /var/tmp
 LockPersonality=true
 RestrictSUIDSGID=true
 
