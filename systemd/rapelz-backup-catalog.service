@@ -1,0 +1,29 @@
+[Unit]
+Description=Rapelz Backup Catalogue API (read-only)
+After=network.target
+
+[Service]
+Type=simple
+User=rapelz-backup
+Group=rapelz-backup
+WorkingDirectory=/opt/rapelz-backup/service
+EnvironmentFile=/etc/rapelz-backup/api.env
+ExecStart=/usr/bin/node /opt/rapelz-backup/service/server.js
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadOnlyPaths=/opt/rapelz-backup/service
+ReadOnlyPaths=/var/lib/rapelz-backup-service/catalog.json
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
