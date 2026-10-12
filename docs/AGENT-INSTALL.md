@@ -20,6 +20,10 @@ Create `/etc/rapelz-backup/` owned by root with mode 700. Review and adapt:
 
 Keep real secrets out of shell history, Git, support tickets, and Discord. Use the existing production backup script until the new agent passes a restore drill.
 
+## Discord webhook notifications
+
+The backup agent calls `/usr/local/sbin/rapelz-discord-notify.sh` after success or failure when the helper is installed. Install it as root with mode `0750`; configure the API and helper to use the same `RAPELZ_WEBHOOK_SETTINGS_FILE` path (default `/var/lib/rapelz-backup-service/discord-webhook.json`). The service saves this file with mode `0600`; its parent directory must be service-owned and mode `0700`. Configure the URL through the authenticated API, never in Git or the static theme. The helper only accepts HTTPS Discord webhook URLs and suppresses curl diagnostics so the URL is not written to logs. Test this on staging with a private test channel before enabling notifications on production.
+
 ## Important scope limitation
 
 The agent only backs up paths explicitly present in the allowlist and databases explicitly present in the database list. It does not automatically discover all Nodes, all customer databases, Docker volume semantics, customer native backup metadata, or a full Pterodactyl recovery plan. Do not describe the host as fully protected until inventory is complete and a restore test succeeds.
