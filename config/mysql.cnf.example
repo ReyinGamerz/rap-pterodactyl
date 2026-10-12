@@ -1,0 +1,6 @@
+# Install as /etc/rapelz-backup/mysql.cnf and chmod 600 root:root.
+# Put credentials in this host-local file only; never commit real values.
+[client]
+user=BACKUP_DATABASE_USER
+password=REPLACE_ON_HOST_ONLY
+host=127.0.0.1
