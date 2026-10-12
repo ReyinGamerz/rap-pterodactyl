@@ -23,7 +23,7 @@ fail(){ log "ERROR: $*"; exit 1; }
 need(){ command -v "$1" >/dev/null 2>&1 || fail "Required command missing: $1"; }
 cleanup(){ [[ -n "${STAGE:-}" && -d "${STAGE:-}" ]] && rm -rf -- "$STAGE"; }
 trap cleanup EXIT
-trap 'rc=$?; log "FAILED rc=$rc line=$LINENO"; exit "$rc"' ERR
+trap 'rc=$?; log "FAILED rc=$rc line=$LINENO"; if [[ -x /usr/local/sbin/rapelz-discord-notify.sh ]]; then /usr/local/sbin/rapelz-discord-notify.sh backup_failure "Rapelz backup gagal: source=$SOURCE_ID kind=$SOURCE_KIND rc=$rc"; fi; exit "$rc"' ERR
 
 [[ $EUID -eq 0 ]] || fail "Run as root; protect configuration and logs."
 [[ "$SOURCE_KIND" =~ ^(panel|node|server|database|file)$ ]] || fail "Invalid RAPELZ_SOURCE_KIND."
@@ -120,3 +120,4 @@ manifest_local="$(stat -c '%s' "$STAGE/remote-manifest.json")"
 # Keep only a short local encrypted copy. Plaintext staging is removed by trap.
 find "$ROOT" -maxdepth 1 -type f -name '*.tar.gz.age' -mtime "+$KEEP_LOCAL_DAYS" -delete
 log "SUCCESS backup_id=$(basename "$ARCHIVE") remote=$REMOTE_FILE size=$cipher_size sha256=$cipher_sha"
+if [[ -x /usr/local/sbin/rapelz-discord-notify.sh ]]; then /usr/local/sbin/rapelz-discord-notify.sh backup_success "Rapelz backup berhasil: source=$SOURCE_ID kind=$SOURCE_KIND size=$cipher_size bytes. Verifikasi ukuran remote dan manifest berhasil."; fi
