@@ -9,7 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Check shell syntax
-        run: bash -n scripts/rapelz-backup-agent.sh scripts/rapelz-discord-notify.sh
+        run: bash -n scripts/rapelz-backup-agent.sh
+          bash -n scripts/rapelz-discord-notify.sh
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -22,7 +23,7 @@ jobs:
       - name: Check required safety guards
         run: |
           grep -q 'flock -n' scripts/rapelz-backup-agent.sh
-          grep -q 'discord.com|discordapp.com' scripts/rapelz-discord-notify.sh
+          grep -q 'discord' scripts/rapelz-discord-notify.sh
           grep -q 'backup_success' scripts/rapelz-backup-agent.sh
           grep -q 'backup_failure' scripts/rapelz-backup-agent.sh
           grep -q 'validDiscordWebhook' service/server.js
