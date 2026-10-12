@@ -1,0 +1,11 @@
+# Copy to /etc/rapelz-backup/paths.txt and edit after auditing the real host.
+# One absolute path per line; # starts a comment.
+# Never enable a path without confirming size, sensitivity, and restore requirements.
+# Example candidates only — verify on this server before enabling:
+# /var/www/pterodactyl
+# /etc/pterodactyl
+# /etc/nginx
+# /etc/letsencrypt
+# /etc/systemd/system
+# /var/lib/pterodactyl/volumes
+# /var/lib/pterodactyl/backups
