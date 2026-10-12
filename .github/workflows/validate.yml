@@ -10,8 +10,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check shell syntax
         run: bash -n scripts/rapelz-backup-agent.sh
-      - name: Validate JSON configuration example
-        run: python3 -m json.tool config/rapelz-backup.example.json >/dev/null
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check API JavaScript syntax
+        run: node --check service/server.js
+      - name: Validate JSON examples
+        run: |
+          python3 -m json.tool config/rapelz-backup.example.json >/dev/null
+          python3 -m json.tool service/catalog.example.json >/dev/null
       - name: Check required safety guards
         run: |
           grep -q 'flock -n' scripts/rapelz-backup-agent.sh
